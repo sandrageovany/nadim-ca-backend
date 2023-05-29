@@ -1,0 +1,194 @@
+<?php
+/* ----------------------------------------------------------------------
+ * app/templates/checklist.php
+ * ----------------------------------------------------------------------
+ * CollectiveAccess
+ * Open-source collections management software
+ * ----------------------------------------------------------------------
+ *
+ * Software by Whirl-i-Gig (http://www.whirl-i-gig.com)
+ * Copyright 2014-2015 Whirl-i-Gig
+ *
+ * For more information visit http://www.CollectiveAccess.org
+ *
+ * This program is free software; you may redistribute it and/or modify it under
+ * the terms of the provided license as published by Whirl-i-Gig
+ *
+ * CollectiveAccess is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTIES whatsoever, including any implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+ *
+ * This source code is free and modifiable under the terms of 
+ * GNU General Public License. (http://www.gnu.org/copyleft/gpl.html). See
+ * the "license.txt" file for details, or visit the CollectiveAccess web site at
+ * http://www.CollectiveAccess.org
+ *
+ * -=-=-=-=-=- CUT HERE -=-=-=-=-=-
+ * Template configuration:
+ *
+ * @name PDF (checklist)
+ * @type page
+ * @pageSize letter
+ * @pageOrientation portrait
+ * @tables ca_objects
+ *
+ * @marginTop 0.75in
+ * @marginLeft 0.25in
+ * @marginBottom 0.5in
+ * @marginRight 0.25in
+ *
+ * ----------------------------------------------------------------------
+ */
+
+	$t_display				= $this->getVar('t_display');
+	$va_display_list 		= $this->getVar('display_list');
+	$vo_result 				= $this->getVar('result');
+	$vn_items_per_page 		= $this->getVar('current_items_per_page');
+	$vs_current_sort 		= $this->getVar('current_sort');
+	$vs_default_action		= $this->getVar('default_action');
+	$vo_ar					= $this->getVar('access_restrictions');
+	$vo_result_context 		= $this->getVar('result_context');
+	$vn_num_items			= (int)$vo_result->numHits();
+	
+	$vn_start 				= 0;
+
+	print $this->render("pdfStart.php");
+	print $this->render("header.php");
+	print $this->render("footer.php");
+?>
+		<div id='body'>
+<?php
+
+		$vo_result->seek(0);
+		
+		$vn_line_count = 0;
+		while($vo_result->nextHit()) {
+			$vn_object_id = $vo_result->get('ca_objects.object_id');		
+?>
+			<div class="row">
+			<table>
+			<tr>
+				<td>
+<?php 
+					if ($vs_path = $vo_result->getMediaPath('ca_object_representations.media', 'thumbnail')) {
+						print "<div class=\"imageTiny\"><img src='{$vs_path}'/></div>";
+					} else {
+?>
+						<div class="imageTinyPlaceholder">&nbsp;</div>
+<?php					
+					}	
+?>								
+
+				</td><td>
+					<div class="metaBlock">
+<?php				
+					print "<div class='title'>".$vo_result->getWithTemplate('^ca_objects.preferred_labels.name (^ca_objects.idno)<br><span>Related collections: </span>^ca_objects.ca_collections
+<br><span>Related objects: </span>^ca_objects.ca_objects
+
+<br><span>Event type: </span>^ca_objects.Evemt_Type_imageform
+
+<br><span>: </span>^ca_objects.comment_event_type_imageform
+
+<br><span>Description: </span>^ca_objects.description
+
+<br><span>People: </span>^ca_objects.People_imageform
+
+<br><span>Image Type: </span>^ca_objects.imagedescription_imageform
+
+<br><span>Geo Loc: </span>^ca_objects.image_geographic_location
+
+<br><span>Date: </span>^ca_objects.Date_list_imageform
+
+<br><span>From To Date: </span>^ca_objects.list_fromto_imageform_latest
+
+<br><span>Century Date: </span>^ca_objects.century_container
+
+<br><span>Decade Date: </span>^ca_objects.decade_container
+
+<br><span>Exact Date: </span>^ca_objects.date_exactdate_imageform
+
+<br><span>Circa Date: </span>^ca_objects.text_circa_imageform
+
+<br><span>Approx Date: </span>^ca_objects.approx_date_imageform
+
+<br><span>Image Subject: </span>^ca_objects.imageform_imagesubject
+
+<br><span>Photographer/Studio: </span>^ca_objects.Photographer_Studio_imageform
+
+<br><span>: </span>^ca_objects.comment_photographer_studio
+
+<br><span>Source: </span>^ca_objects.source_imgform
+
+<br><span>: </span>^ca_objects.comment_source
+
+<br><span>Negative Details: </span>^ca_objects.negativedetails_imageform
+
+<br><span>: </span>^ca_objects.other_negdetails_imagelist
+
+<br><span>Slide Details: </span>^ca_objects.slidedetails_imageform
+
+<br><span>: </span>^ca_objects.other_slidedetails_imageform
+
+<br><span>Recto: </span>^ca_objects.recto_container_imageform
+
+<br><span>: </span>^ca_objects.signature_type
+
+<br><span>Verso: </span>^ca_objects.Verso_checklist_imageform
+
+<br><span>: </span>^ca_objects.verso_signature_type
+
+<br><span>Slide: </span>^ca_objects.Frame_slide_imageform
+
+<br><span>Pocket: </span>^ca_objects.Pocket_imageform
+
+<br><span>Mount: </span>^ca_objects.mount_container
+
+<br><span>Photographic Process: </span>^ca_objects.photographic_process_list
+
+<br><span>: </span>^ca_objects.other_photographicprocess
+
+<br><span>Image Status: </span>^ca_objects.image_status_condition
+
+<br><span>Related collections: </span>^ca_objects.Image_status_imageform_2
+
+<br><span>Phy Location List: </span>^ca_objects.Phy_Location_Entity_form
+
+<br><span>Phy Location: </span>^ca_objects.phylocofimage_imageform
+
+<br><span>Digital Location: </span>^ca_objects.diglocofimage_imageform
+
+<br><span>Existance Of Copies: </span>^ca_objects.altformavail
+
+<br><span>Nadim Copyright: </span>^ca_objects.NADIM_copyright
+
+<br><span>Image Copyright: </span>^ca_objects.imageform_copyright
+
+<br><span>Bibliographic: </span>^ca_objects.bibliographic_citation
+
+<br><span>Tags: </span>^ca_objects.ca_items_tags').
+
+"</div>"; 
+
+if (is_array($va_display_list)) {
+                        foreach($va_display_list as $vn_placement_id => $va_display_item) {
+                            if (!strlen($vs_display_value = $t_display->getDisplayValue($vo_result, $vn_placement_id, array('forReport' => true, 'purify' => true)))) {
+                                if (!(bool)$t_display->getSetting('show_empty_values')) { continue; }
+                                $vs_display_value = "&lt;"._t('not defined')."&gt;";
+                            } 
+                        
+                            print "<div class='metadata'><span class='displayHeader'>".$va_display_item['display']."</span>: <span class='displayValue' >".(strlen($vs_display_value) > 1200 ? strip_tags(substr($vs_display_value, 0, 1197))."..." : $vs_display_value)."</span></div>";		
+                        }	
+                    }						
+?>
+					</div>				
+				</td>	
+			</tr>
+			</table>	
+			</div>
+<?php
+		}
+?>
+		</div>
+<?php
+	print $this->render("pdfEnd.php");
+?>
